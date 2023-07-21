@@ -59,7 +59,9 @@ repeat {
         }
 
         let diffDays = Int(checkoutDate.timeIntervalSinceReferenceDate-checkinDate.timeIntervalSinceReferenceDate)/3600/24
+
         guard var price = roomInfo[roomNum] else { print(inputError); break }
+        price = myInfo.isPremium ? price * 8 / 10 : price
         let newPrice = price * diffDays
         if newPrice > myInfo.balance {
             print("오류: 잔금이 부족합니다")
@@ -69,6 +71,13 @@ repeat {
         info = (roomNum, checkin, checkout, price, newPrice)
         myInfo.reservationList.append(info)
         myInfo.balance -= newPrice
+        if myInfo.isPremium {
+            print("프리미엄 회원 혜택으로 20% 할인된 \(newPrice)원이 출금됩니다")
+        } else if diffDays >= 10 {
+            // 현재 프리미엄 회원이 아니고 10일 이상 숙박 예약 완료한 경우 다음번 예약부터 20% 할인
+            myInfo.isPremium = true
+            print("프리미엄 회원으로 승급되셨습니다. 이후 예약에 대해서 20% 할인이 적용됩니다")
+        }
         print("예약이 완료되었습니다")
         inoutData.append(("3", newPrice))
 

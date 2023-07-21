@@ -9,5 +9,6 @@ import Foundation
 
 class UserInfo {
     var balance = 0
+    var isPremium = false
     var reservationList: [reservation] = []
 }
